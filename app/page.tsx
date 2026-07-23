@@ -1,71 +1,12 @@
-const players = [
-  {
-    name: "Erling Haaland",
-    club: "Manchester City",
-    position: "ST",
-    age: 24,
-    value: "€180M",
-  },
-  {
-    name: "Cole Palmer",
-    club: "Chelsea",
-    position: "CAM",
-    age: 23,
-    value: "€120M",
-  },
-  {
-    name: "Bukayo Saka",
-    club: "Arsenal",
-    position: "RW",
-    age: 23,
-    value: "€150M",
-  },
-  {
-    name: "Florian Wirtz",
-    club: "Liverpool",
-    position: "CAM",
-    age: 22,
-    value: "€140M",
-  },
-  {
-    name: "Alexander Isak",
-    club: "Newcastle",
-    position: "ST",
-    age: 25,
-    value: "€120M",
-  },
-];
+import Image from "next/image";
+import Link from "next/link";
+import SearchBar from "@/components/SearchBar";
+import { players } from "@/data/players";
+
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-[#07111f] text-white">
-      <nav className="sticky top-0 z-50 border-b border-white/10 bg-[#07111f]/90 backdrop-blur">
-        <div className="mx-auto flex h-20 max-w-7xl items-center justify-between px-6">
-          <div className="text-2xl font-bold tracking-tight">
-            Tav<span className="text-green-500">alyze</span>
-          </div>
-
-          <div className="flex items-center gap-8 text-sm text-gray-300">
-            <a href="#" className="transition hover:text-white">
-              Players
-            </a>
-            <a href="#" className="transition hover:text-white">
-              Teams
-            </a>
-            <a href="#" className="transition hover:text-white">
-              Market Values
-            </a>
-            <a href="#" className="transition hover:text-white">
-              Transfers
-            </a>
-          </div>
-
-          <button className="rounded-xl bg-green-500 px-5 py-2 font-semibold text-black transition hover:bg-green-400">
-            Sign in
-          </button>
-        </div>
-      </nav>
-
       <section className="mx-auto grid max-w-7xl gap-12 px-6 py-20 lg:grid-cols-2 lg:items-center">
         <div>
           <div className="mb-6 inline-flex rounded-full border border-green-500/30 bg-green-500/10 px-4 py-2 text-sm font-medium text-green-400">
@@ -73,8 +14,7 @@ export default function Home() {
           </div>
 
           <h1 className="max-w-3xl text-5xl font-bold leading-tight md:text-7xl">
-            Football market values,{" "}
-            <span className="text-green-500">made smarter.</span>
+            Football market values, <span className="text-green-500">made smarter.</span>
           </h1>
 
           <p className="mt-6 max-w-xl text-lg leading-8 text-gray-400">
@@ -82,15 +22,7 @@ export default function Home() {
             transfers and future football intelligence tools.
           </p>
 
-          <div className="mt-8 flex max-w-xl rounded-2xl border border-white/10 bg-white/5 p-2">
-            <input
-              className="flex-1 bg-transparent px-4 text-white outline-none placeholder:text-gray-500"
-              placeholder="Search Haaland, Palmer, Saka..."
-            />
-            <button className="rounded-xl bg-green-500 px-6 py-3 font-semibold text-black transition hover:bg-green-400">
-              Search
-            </button>
-          </div>
+          <SearchBar className="mt-8 max-w-xl" />
 
           <div className="mt-10 grid max-w-xl grid-cols-3 gap-4">
             <div className="rounded-2xl border border-white/10 bg-white/5 p-4">
@@ -115,15 +47,9 @@ export default function Home() {
             Haaland image placeholder
           </div>
 
-          <p className="text-sm font-semibold uppercase text-green-500">
-            Featured Player
-          </p>
-
+          <p className="text-sm font-semibold uppercase text-green-500">Featured Player</p>
           <h2 className="mt-3 text-4xl font-bold">Erling Haaland</h2>
-
-          <p className="mt-2 text-gray-400">
-            ST · Manchester City · Norway
-          </p>
+          <p className="mt-2 text-gray-400">ST · Manchester City · Norway</p>
 
           <div className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-5">
             <p className="text-sm text-gray-400">Market Value</p>
@@ -161,19 +87,25 @@ export default function Home() {
             <h2 className="mt-2 text-3xl font-bold">Trending Players</h2>
           </div>
 
-          <p className="text-sm text-gray-500">Demo player data</p>
+          <p className="text-sm text-gray-500">Click any player to view profile</p>
         </div>
 
         <div className="grid gap-5 md:grid-cols-5">
-          {players.map((player) => (
-            <div
-              key={player.name}
-              className="group rounded-3xl border border-white/10 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-green-500/40 hover:bg-white/10"
+          {players.slice(0, 5).map((player) => (
+            <Link
+              href={`/players/${player.id}`}
+              key={player.id}
+              className="group block rounded-3xl border border-white/10 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-green-500/40 hover:bg-white/10"
             >
-              <div className="mb-5 flex h-32 items-center justify-center rounded-2xl border border-dashed border-white/20 bg-black/20 text-sm text-gray-500">
-                Player image
-              </div>
-
+              <div className="relative mb-5 h-40 overflow-hidden rounded-2xl bg-black/20">
+  <Image
+    src={player.image}
+    alt={player.name}
+    fill
+    sizes="(max-width: 768px) 100vw, 20vw"
+    className="object-contain p-2"
+  />
+</div>
               <h3 className="font-semibold">{player.name}</h3>
 
               <p className="mt-1 text-sm text-gray-400">
@@ -182,14 +114,14 @@ export default function Home() {
 
               <div className="mt-6">
                 <p className="text-sm text-gray-400">Market Value</p>
-                <p className="mt-1 text-2xl font-bold">{player.value}</p>
+                <p className="mt-1 text-2xl font-bold">€{player.marketValue}M</p>
               </div>
 
               <div className="mt-4 flex items-center justify-between text-sm text-gray-500">
                 <span>Age {player.age}</span>
-                <span>Premier League</span>
+                <span>View Profile →</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </section>
@@ -200,9 +132,7 @@ export default function Home() {
             Coming soon
           </p>
 
-          <h2 className="mt-3 text-3xl font-bold">
-            Future Tavalyze features
-          </h2>
+          <h2 className="mt-3 text-3xl font-bold">Future Tavalyze features</h2>
 
           <div className="mt-8 grid gap-4 md:grid-cols-4">
             <div className="rounded-2xl border border-white/10 bg-black/20 p-5">
