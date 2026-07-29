@@ -14,6 +14,19 @@ type BattleMetric = {
   lowerWins?: boolean;
 };
 
+type LiveStats = {
+  playerId: string;
+  season: number;
+  source: string;
+  team: string;
+  league: string;
+  appearances: number;
+  minutes: number;
+  goals: number;
+  assists: number;
+  rating: number | null;
+};
+
 const maxMarketValue = Math.max(...players.map((player) => player.marketValue));
 
 function playerIndex(player: Player) {
@@ -28,6 +41,8 @@ export default function ComparePage() {
   const [firstPlayerId, setFirstPlayerId] = useState(players[0]?.id ?? "");
   const [secondPlayerId, setSecondPlayerId] = useState(players[1]?.id ?? "");
   const [copied, setCopied] = useState(false);
+  const [liveStats, setLiveStats] = useState<Record<string, LiveStats>>({});
+  const [loadingStats, setLoadingStats] = useState(false);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -61,10 +76,54 @@ export default function ComparePage() {
     window.history.replaceState({}, "", url);
   }, [firstPlayer, secondPlayer]);
 
+  useEffect(() => {
+    if (!firstPlayer || !secondPlayer) return;
+
+    const controller = new AbortController();
+
+    async function loadStats() {
+      setLoadingStats(true);
+
+      try {
+        const ids = [firstPlayer.id, secondPlayer.id];
+        const results = await Promise.all(
+          ids.map(async (id) => {
+            const response = await fetch(
+              `/api/football/player-stats?player=${encodeURIComponent(id)}`,
+              { signal: controller.signal },
+            );
+
+            if (!response.ok) return null;
+            return (await response.json()) as LiveStats;
+          }),
+        );
+
+        setLiveStats((current) => {
+          const next = { ...current };
+          results.forEach((result) => {
+            if (result) next[result.playerId] = result;
+          });
+          return next;
+        });
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === "AbortError")) {
+          console.error("Unable to load Battle Lab statistics.", error);
+        }
+      } finally {
+        if (!controller.signal.aborted) setLoadingStats(false);
+      }
+    }
+
+    void loadStats();
+    return () => controller.abort();
+  }, [firstPlayer, secondPlayer]);
+
   if (!firstPlayer || !secondPlayer) return null;
 
   const firstIndex = playerIndex(firstPlayer);
   const secondIndex = playerIndex(secondPlayer);
+  const firstLive = liveStats[firstPlayer.id];
+  const secondLive = liveStats[secondPlayer.id];
   const winner =
     firstIndex === secondIndex
       ? null
@@ -95,6 +154,38 @@ export default function ComparePage() {
       firstDisplay: `${firstIndex}`,
       secondDisplay: `${secondIndex}`,
     },
+    ...(firstLive && secondLive
+      ? [
+          {
+            label: "Appearances",
+            first: firstLive.appearances,
+            second: secondLive.appearances,
+            firstDisplay: `${firstLive.appearances}`,
+            secondDisplay: `${secondLive.appearances}`,
+          },
+          {
+            label: "Goals",
+            first: firstLive.goals,
+            second: secondLive.goals,
+            firstDisplay: `${firstLive.goals}`,
+            secondDisplay: `${secondLive.goals}`,
+          },
+          {
+            label: "Assists",
+            first: firstLive.assists,
+            second: secondLive.assists,
+            firstDisplay: `${firstLive.assists}`,
+            secondDisplay: `${secondLive.assists}`,
+          },
+          {
+            label: "Minutes",
+            first: firstLive.minutes,
+            second: secondLive.minutes,
+            firstDisplay: firstLive.minutes.toLocaleString(),
+            secondDisplay: secondLive.minutes.toLocaleString(),
+          },
+        ]
+      : []),
   ];
 
   function swapPlayers() {
@@ -132,6 +223,22 @@ export default function ComparePage() {
             Put any two stars head-to-head. Tavalyze weighs market value, age
             profile and verified data coverage to create an instant battle index.
           </p>
+          <div className="mx-auto mt-5 flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-slate-400">
+            <span
+              className={`h-2 w-2 rounded-full ${
+                firstLive && secondLive
+                  ? "bg-green-400"
+                  : loadingStats
+                    ? "animate-pulse bg-amber-300"
+                    : "bg-slate-600"
+              }`}
+            />
+            {firstLive && secondLive
+              ? `Live 2024 stats · ${firstLive.source}`
+              : loadingStats
+                ? "Loading verified 2024 stats…"
+                : "Profile comparison ready"}
+          </div>
         </header>
 
         <div className="mt-10 grid items-end gap-4 rounded-[2rem] border border-white/10 bg-slate-950/70 p-5 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl md:grid-cols-[1fr_auto_1fr]">
@@ -221,11 +328,15 @@ export default function ComparePage() {
           <InsightCard
             eyebrow="Data confidence"
             title={
-              firstPlayer.apiFootballId && secondPlayer.apiFootballId
-                ? "Both API connected"
+              firstLive && secondLive
+                ? "Live stats verified"
                 : "Mixed coverage"
             }
-            body="Player identities are linked to API-Football; market values remain clearly labelled Tavalyze estimates."
+            body={
+              firstLive && secondLive
+                ? `${firstLive.season} season performance comes from API-Football. Market values remain clearly labelled Tavalyze estimates.`
+                : "Player identities are linked to API-Football; verified performance is loading or unavailable."
+            }
           />
         </div>
 
