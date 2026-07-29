@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -18,6 +19,34 @@ type Props = {
     id: string;
   }>;
 };
+
+export function generateStaticParams() {
+  return players.map((player) => ({ id: player.id }));
+}
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const player = players.find((item) => item.id === id);
+
+  if (!player) {
+    return { title: "Player not found" };
+  }
+
+  const description = `${player.name}: €${player.marketValue}M Tavalyze market-value estimate, ${player.position} profile, club context and transparent data coverage.`;
+
+  return {
+    title: `${player.name} — Market Value & Profile`,
+    description,
+    alternates: { canonical: `/players/${player.id}` },
+    openGraph: {
+      type: "profile",
+      url: `/players/${player.id}`,
+      title: `${player.name} on Tavalyze`,
+      description,
+      images: [{ url: player.image, alt: player.name }],
+    },
+  };
+}
 
 export default async function PlayerPage({ params }: Props) {
   const { id } = await params;
