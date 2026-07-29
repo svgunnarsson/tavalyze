@@ -1,7 +1,11 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
 
 export default function Navbar() {
+  const pathname = usePathname();
   const navigation = [
     { href: "/players", label: "Players" },
     { href: "/teams", label: "Teams" },
@@ -25,7 +29,16 @@ export default function Navbar() {
               <Link
                 key={item.href}
                 href={item.href}
-                className="whitespace-nowrap transition hover:text-white"
+                aria-current={
+                  pathname === item.href || pathname.startsWith(`${item.href}/`)
+                    ? "page"
+                    : undefined
+                }
+                className={`whitespace-nowrap rounded-lg px-2.5 py-2 transition ${
+                  pathname === item.href || pathname.startsWith(`${item.href}/`)
+                    ? "bg-white/10 text-white"
+                    : "hover:bg-white/5 hover:text-white"
+                }`}
               >
                 {item.label}
               </Link>
@@ -40,7 +53,16 @@ export default function Navbar() {
             <Link
               key={item.href}
               href={item.href}
-              className="shrink-0 transition hover:text-white"
+              aria-current={
+                pathname === item.href || pathname.startsWith(`${item.href}/`)
+                  ? "page"
+                  : undefined
+              }
+              className={`shrink-0 rounded-full px-3 py-1.5 transition ${
+                pathname === item.href || pathname.startsWith(`${item.href}/`)
+                  ? "bg-green-500 text-black"
+                  : "hover:bg-white/5 hover:text-white"
+              }`}
             >
               {item.label}
             </Link>
