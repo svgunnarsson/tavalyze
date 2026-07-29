@@ -42,7 +42,9 @@ export default function ComparePage() {
   const [secondPlayerId, setSecondPlayerId] = useState(players[1]?.id ?? "");
   const [copied, setCopied] = useState(false);
   const [liveStats, setLiveStats] = useState<Record<string, LiveStats>>({});
+  const [statsErrors, setStatsErrors] = useState<Record<string, string>>({});
   const [loadingStats, setLoadingStats] = useState(false);
+  const [statsAttempt, setStatsAttempt] = useState(0);
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
@@ -93,15 +95,37 @@ export default function ComparePage() {
               { signal: controller.signal },
             );
 
-            if (!response.ok) return null;
-            return (await response.json()) as LiveStats;
+            if (!response.ok) {
+              const payload = (await response.json().catch(() => null)) as {
+                message?: string;
+              } | null;
+              return {
+                id,
+                stats: null,
+                error: payload?.message ?? "Verified statistics unavailable.",
+              };
+            }
+
+            return {
+              id,
+              stats: (await response.json()) as LiveStats,
+              error: null,
+            };
           }),
         );
 
         setLiveStats((current) => {
           const next = { ...current };
           results.forEach((result) => {
-            if (result) next[result.playerId] = result;
+            if (result.stats) next[result.id] = result.stats;
+          });
+          return next;
+        });
+        setStatsErrors((current) => {
+          const next = { ...current };
+          results.forEach((result) => {
+            if (result.error) next[result.id] = result.error;
+            else delete next[result.id];
           });
           return next;
         });
@@ -116,7 +140,7 @@ export default function ComparePage() {
 
     void loadStats();
     return () => controller.abort();
-  }, [firstPlayer, secondPlayer]);
+  }, [firstPlayer, secondPlayer, statsAttempt]);
 
   if (!firstPlayer || !secondPlayer) return null;
 
@@ -124,6 +148,8 @@ export default function ComparePage() {
   const secondIndex = playerIndex(secondPlayer);
   const firstLive = liveStats[firstPlayer.id];
   const secondLive = liveStats[secondPlayer.id];
+  const failedStats =
+    statsErrors[firstPlayer.id] || statsErrors[secondPlayer.id] || null;
   const winner =
     firstIndex === secondIndex
       ? null
@@ -223,13 +249,15 @@ export default function ComparePage() {
             Put any two stars head-to-head. Tavalyze weighs market value, age
             profile and verified data coverage to create an instant battle index.
           </p>
-          <div className="mx-auto mt-5 flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-slate-400">
+          <div className="mx-auto mt-5 flex w-fit flex-wrap items-center justify-center gap-2 rounded-full border border-white/10 bg-white/[0.04] px-4 py-2 text-xs font-semibold text-slate-400">
             <span
               className={`h-2 w-2 rounded-full ${
                 firstLive && secondLive
                   ? "bg-green-400"
-                  : loadingStats
-                    ? "animate-pulse bg-amber-300"
+                : loadingStats
+                  ? "animate-pulse bg-amber-300"
+                  : failedStats
+                    ? "bg-rose-400"
                     : "bg-slate-600"
               }`}
             />
@@ -237,7 +265,18 @@ export default function ComparePage() {
               ? `Live 2024 stats · ${firstLive.source}`
               : loadingStats
                 ? "Loading verified 2024 stats…"
-                : "Profile comparison ready"}
+                : failedStats
+                  ? "2024 performance data unavailable"
+                  : "Profile comparison ready"}
+            {failedStats && !loadingStats && (
+              <button
+                type="button"
+                onClick={() => setStatsAttempt((attempt) => attempt + 1)}
+                className="ml-1 font-bold text-white underline decoration-white/30 underline-offset-4 hover:text-green-300"
+              >
+                Retry
+              </button>
+            )}
           </div>
         </header>
 
@@ -330,12 +369,20 @@ export default function ComparePage() {
             title={
               firstLive && secondLive
                 ? "Live stats verified"
+                : firstLive || secondLive
+                  ? "Partial live coverage"
+                  : failedStats
+                    ? "Provider unavailable"
                 : "Mixed coverage"
             }
             body={
               firstLive && secondLive
                 ? `${firstLive.season} season performance comes from API-Football. Market values remain clearly labelled Tavalyze estimates.`
-                : "Player identities are linked to API-Football; verified performance is loading or unavailable."
+                : firstLive || secondLive
+                  ? "One verified 2024 season profile is available. The comparison keeps performance metrics hidden until both players have equal coverage."
+                  : failedStats
+                    ? "API-Football did not return usable season statistics. Tavalyze keeps those fields hidden rather than filling them with estimates."
+                    : "Player identities are linked to API-Football; verified performance is loading or unavailable."
             }
           />
         </div>
