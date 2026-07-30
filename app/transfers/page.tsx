@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import PlayerPortrait from "@/components/PlayerPortrait";
 import { players } from "@/data/players";
 
 const transfers = [
@@ -94,10 +94,8 @@ export default function TransfersPage() {
               className="group grid gap-6 rounded-3xl border border-white/10 bg-white/5 p-6 transition hover:-translate-y-1 hover:border-green-500/40 hover:bg-white/10 md:grid-cols-[90px_1fr_220px_140px] md:items-center"
             >
               <div className="relative h-20 w-20 overflow-hidden rounded-2xl bg-black/20">
-                <Image
-                  src={transfer.player.image}
-                  alt={transfer.player.name}
-                  fill
+                <PlayerPortrait
+                  player={transfer.player}
                   sizes="80px"
                   className="object-contain p-1"
                 />
