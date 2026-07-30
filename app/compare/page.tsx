@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
+import PlayerPortrait from "@/components/PlayerPortrait";
 import { players, type Player } from "@/data/players";
 
 type BattleMetric = {
@@ -408,6 +408,10 @@ function PlayerSelect({
   excludedId: string;
   onChange: (id: string) => void;
 }) {
+  const leagueGroups = Array.from(
+    new Set(players.map((player) => player.league)),
+  ).sort();
+
   return (
     <label className="block">
       <span className="mb-2 block text-xs font-bold uppercase tracking-[0.18em] text-slate-500">
@@ -418,10 +422,21 @@ function PlayerSelect({
         onChange={(event) => onChange(event.target.value)}
         className="w-full rounded-2xl border border-white/10 bg-[#0d1929] px-5 py-4 font-bold text-white outline-none transition focus:border-cyan-400/60"
       >
-        {players.map((player) => (
-          <option key={player.id} value={player.id} disabled={player.id === excludedId}>
-            {player.name} — {player.club}
-          </option>
+        {leagueGroups.map((league) => (
+          <optgroup key={league} label={league}>
+            {players
+              .filter((player) => player.league === league)
+              .sort((a, b) => b.marketValue - a.marketValue)
+              .map((player) => (
+                <option
+                  key={player.id}
+                  value={player.id}
+                  disabled={player.id === excludedId}
+                >
+                  {player.name} — {player.club}
+                </option>
+              ))}
+          </optgroup>
         ))}
       </select>
     </label>
@@ -454,10 +469,8 @@ function BattlePlayer({
         <p className="text-3xl font-black">{score}</p>
       </div>
       <div className="relative h-72 overflow-hidden rounded-3xl bg-gradient-to-b from-white/10 to-transparent md:h-96">
-        <Image
-          src={player.image}
-          alt={player.name}
-          fill
+        <PlayerPortrait
+          player={player}
           sizes="(max-width: 768px) 100vw, 500px"
           className="object-contain p-3 transition duration-500 group-hover:scale-105"
           priority
