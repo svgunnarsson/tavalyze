@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { players } from "@/data/players";
+import { clubSlug } from "@/lib/player-slugs";
 
 const baseUrl = "https://www.tavalyze.com";
 
@@ -27,6 +28,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
       priority: 0.7,
+    })),
+    ...Array.from(new Set(players.map((player) => player.club))).map((club) => ({
+      url: `${baseUrl}/teams/${clubSlug(club)}`,
+      lastModified: new Date(),
+      changeFrequency: "weekly" as const,
+      priority: 0.65,
     })),
   ];
 }
