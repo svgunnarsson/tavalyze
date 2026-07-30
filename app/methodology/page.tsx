@@ -46,9 +46,9 @@ export default function MethodologyPage() {
           Data Sources & Methodology
         </h1>
         <p className="mt-5 max-w-3xl text-lg leading-8 text-gray-400">
-          Tavalyze is currently an MVP. This page explains what is verified,
-          what comes from another provider and what exists only to demonstrate
-          the future product.
+          Tavalyze is currently a 100-player MVP spanning five major European
+          leagues. This page explains what is verified, what comes from another
+          provider and what exists only to demonstrate the future product.
         </p>
 
         <div className="mt-12 grid gap-5 md:grid-cols-2">
@@ -72,13 +72,15 @@ export default function MethodologyPage() {
           <ul className="mt-6 space-y-4 leading-7 text-gray-400">
             <li>
               <strong className="text-white">Player and team facts:</strong>{" "}
-              mostly a manually entered demo dataset. Profiles without source
-              links should be treated as unverified.
+              new league snapshots show a named source and check date. Profiles
+              without those links remain prototype data and should not be
+              treated as current or authoritative.
             </li>
             <li>
-              <strong className="text-white">Market values:</strong> manually
-              entered estimates. A sourced value shows the provider and date;
-              it is never the same thing as a confirmed transfer fee.
+              <strong className="text-white">Market values:</strong> the
+              expanded dataset uses dated Transfermarkt league snapshots.
+              These are third-party estimates and never the same thing as a
+              confirmed transfer fee.
             </li>
             <li>
               <strong className="text-white">Value forecasts:</strong> a simple
