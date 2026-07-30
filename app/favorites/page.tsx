@@ -1,7 +1,7 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
+import PlayerPortrait from "@/components/PlayerPortrait";
 import { toggleFavoritePlayer, useFavoritePlayerIds } from "@/hooks/useFavorites";
 import { players } from "@/data/players";
 
@@ -32,10 +32,8 @@ export default function FavoritesPage() {
               >
                 <Link href={`/players/${player.id}`} className="group block">
                   <div className="relative h-52 overflow-hidden rounded-2xl bg-black/20">
-                    <Image
-                      src={player.image}
-                      alt={player.name}
-                      fill
+                    <PlayerPortrait
+                      player={player}
                       sizes="(max-width: 640px) 100vw, 300px"
                       className="object-contain p-3 transition duration-300 group-hover:scale-105"
                     />
