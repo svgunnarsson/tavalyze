@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import PlayerPortrait from "@/components/PlayerPortrait";
 import SearchBar from "@/components/SearchBar";
 import { players } from "@/data/players";
 
@@ -110,13 +110,11 @@ export default function Home() {
             <div className="mt-6 grid gap-5 sm:grid-cols-[1fr_1.05fr] sm:items-end">
               <div className="relative h-72 overflow-hidden rounded-3xl bg-gradient-to-b from-sky-400/10 to-black/20">
                 <div className="absolute inset-x-8 bottom-3 h-8 rounded-full bg-sky-400/15 blur-xl" />
-                <Image
-                  src={featured.image}
-                  alt={featured.name}
-                  fill
-                  priority
+                <PlayerPortrait
+                  player={featured}
                   sizes="(max-width: 640px) 100vw, 360px"
                   className="object-contain object-bottom p-3"
+                  priority
                 />
               </div>
 
@@ -203,10 +201,8 @@ export default function Home() {
                 <span className="absolute left-3 top-3 z-10 font-mono text-xs text-slate-500">
                   #{String(index + 1).padStart(2, "0")}
                 </span>
-                <Image
-                  src={player.image}
-                  alt={player.name}
-                  fill
+                <PlayerPortrait
+                  player={player}
                   sizes="(max-width: 640px) 100vw, 20vw"
                   className="object-contain p-3 transition duration-300 group-hover:scale-105"
                 />
