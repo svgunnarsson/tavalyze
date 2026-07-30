@@ -1,19 +1,27 @@
 import type { Player } from "@/data/players";
 
 export default function DataStatusPanel({ player }: { player: Player }) {
-  const clubVerified = player.dataStatus?.club === "verified";
+  const clubStatus = player.dataStatus?.club ?? "demo";
   const valueSourced = player.dataStatus?.marketValue === "sourced";
 
   return (
     <aside className="mt-8 rounded-2xl border border-white/10 bg-black/20 p-5">
       <div className="flex flex-wrap items-center gap-2">
-        <StatusBadge verified={clubVerified}>
-          Club {clubVerified ? "verified" : "demo data"}
+        {player.apiFootballId && (
+          <StatusBadge tone="info">Profile API-linked</StatusBadge>
+        )}
+        <StatusBadge tone={clubStatus === "verified" ? "success" : clubStatus === "sourced" ? "info" : "warning"}>
+          Club{" "}
+          {clubStatus === "verified"
+            ? "officially verified"
+            : clubStatus === "sourced"
+              ? "sourced snapshot"
+              : "prototype data"}
         </StatusBadge>
-        <StatusBadge verified={valueSourced}>
+        <StatusBadge tone={valueSourced ? "success" : "warning"}>
           Value {valueSourced ? "sourced" : "demo estimate"}
         </StatusBadge>
-        <StatusBadge verified={false}>Forecast modelled</StatusBadge>
+        <StatusBadge tone="warning">Forecast modelled</StatusBadge>
       </div>
 
       <div className="mt-4 flex flex-col gap-2 text-xs text-gray-500 sm:flex-row sm:items-center sm:justify-between">
@@ -53,21 +61,23 @@ export default function DataStatusPanel({ player }: { player: Player }) {
 }
 
 function StatusBadge({
-  verified,
+  tone,
   children,
 }: {
-  verified: boolean;
+  tone: "success" | "info" | "warning";
   children: React.ReactNode;
 }) {
+  const styles = {
+    success: "border-green-500/30 bg-green-500/10 text-green-400",
+    info: "border-sky-400/30 bg-sky-400/10 text-sky-300",
+    warning: "border-amber-400/30 bg-amber-400/10 text-amber-300",
+  };
+
   return (
     <span
-      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${
-        verified
-          ? "border-green-500/30 bg-green-500/10 text-green-400"
-          : "border-amber-400/30 bg-amber-400/10 text-amber-300"
-      }`}
+      className={`inline-flex items-center gap-1.5 rounded-full border px-3 py-1 text-xs font-semibold ${styles[tone]}`}
     >
-      <span aria-hidden="true">{verified ? "✓" : "◇"}</span>
+      <span aria-hidden="true">{tone === "success" ? "✓" : "◇"}</span>
       {children}
     </span>
   );
