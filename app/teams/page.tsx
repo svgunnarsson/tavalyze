@@ -1,19 +1,10 @@
 import Link from "next/link";
 import { players } from "@/data/players";
-
-const teamSlugs: Record<string, string> = {
-  Arsenal: "arsenal",
-  "Manchester City": "manchester-city",
-  Liverpool: "liverpool",
-  Chelsea: "chelsea",
-  "Tottenham Hotspur": "tottenham-hotspur",
-  "Manchester United": "manchester-united",
-  "Aston Villa": "aston-villa",
-};
+import { clubSlug } from "@/lib/player-slugs";
 
 export default function TeamsPage() {
-  const teams = Array.from(new Set(players.map((player) => player.club))).map(
-    (club) => {
+  const teams = Array.from(new Set(players.map((player) => player.club)))
+    .map((club) => {
       const squad = players.filter((player) => player.club === club);
 
       const totalValue = squad.reduce(
@@ -26,25 +17,31 @@ export default function TeamsPage() {
 
       return {
         club,
-        slug: teamSlugs[club],
+        league: squad[0].league,
+        slug: clubSlug(club),
         squadSize: squad.length,
         totalValue,
         averageAge,
       };
-    }
-  );
+    })
+    .sort(
+      (a, b) =>
+        a.league.localeCompare(b.league) ||
+        b.totalValue - a.totalValue ||
+        a.club.localeCompare(b.club),
+    );
 
   return (
     <main className="min-h-screen bg-[#07111f] text-white">
       <section className="mx-auto max-w-7xl px-6 py-14">
         <p className="text-sm font-semibold uppercase tracking-wider text-green-500">
-          Premier League
+          Global club directory
         </p>
 
         <h1 className="mt-2 text-5xl font-bold">Teams</h1>
 
         <p className="mt-3 text-gray-400">
-          Explore every club represented in Tavalyze V1.
+          Explore {teams.length} clubs across five major European leagues.
         </p>
 
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
@@ -63,6 +60,9 @@ export default function TeamsPage() {
               </div>
 
               <h2 className="mt-6 text-2xl font-bold">{team.club}</h2>
+              <p className="mt-1 text-sm font-semibold text-sky-300">
+                {team.league}
+              </p>
 
               <div className="mt-6 grid grid-cols-3 gap-3">
                 <div>
