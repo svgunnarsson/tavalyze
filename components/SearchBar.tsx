@@ -1,8 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { FormEvent, KeyboardEvent, useMemo, useState } from "react";
+import PlayerPortrait from "@/components/PlayerPortrait";
 import { players } from "@/data/players";
 
 type SearchBarProps = {
@@ -156,10 +156,8 @@ export default function SearchBar({
                 }`}
               >
                 <span className="relative h-11 w-11 shrink-0 overflow-hidden rounded-lg bg-black/20">
-                  <Image
-                    src={player.image}
-                    alt=""
-                    fill
+                  <PlayerPortrait
+                    player={player}
                     sizes="44px"
                     className="object-contain p-1"
                   />
