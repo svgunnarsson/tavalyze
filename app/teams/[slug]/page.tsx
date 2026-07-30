@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
+import PlayerPortrait from "@/components/PlayerPortrait";
 import { players } from "@/data/players";
+import { clubSlug } from "@/lib/player-slugs";
 
 type Props = {
   params: Promise<{ slug: string }>;
 };
-
-function clubSlug(club: string) {
-  return club.toLowerCase().replace(/\s+/g, "-");
-}
 
 export function generateStaticParams() {
   return Array.from(new Set(players.map((player) => player.club))).map((club) => ({
@@ -40,6 +37,7 @@ export default async function TeamPage({ params }: Props) {
   if (teamPlayers.length === 0) notFound();
 
   const club = teamPlayers[0].club;
+  const league = teamPlayers[0].league;
   const totalValue = teamPlayers.reduce(
     (total, player) => total + player.marketValue,
     0,
@@ -71,7 +69,7 @@ export default async function TeamPage({ params }: Props) {
             </div>
             <div>
               <p className="text-sm font-bold uppercase tracking-[0.2em] text-green-400">
-                Club intelligence
+                {league} · Club intelligence
               </p>
               <h1 className="mt-2 text-5xl font-black tracking-tight md:text-6xl">
                 {club}
@@ -125,10 +123,8 @@ export default async function TeamPage({ params }: Props) {
                 <span className="absolute left-3 top-3 z-10 rounded-full bg-black/40 px-2.5 py-1 font-mono text-xs text-slate-400 backdrop-blur">
                   #{index + 1}
                 </span>
-                <Image
-                  src={player.image}
-                  alt={player.name}
-                  fill
+                <PlayerPortrait
+                  player={player}
                   sizes="(max-width: 640px) 100vw, 300px"
                   className="object-contain p-3 transition duration-300 group-hover:scale-105"
                 />
