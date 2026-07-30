@@ -1,15 +1,16 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useMemo, useState } from "react";
+import PlayerPortrait from "@/components/PlayerPortrait";
 import { players } from "@/data/players";
 
 type SortOption = "market-high" | "market-low" | "name" | "age-young";
-type DataFilter = "all" | "connected" | "demo";
+type DataFilter = "all" | "connected" | "sourced" | "demo";
 
 export default function PlayersPage() {
   const [search, setSearch] = useState("");
+  const [selectedLeague, setSelectedLeague] = useState("All");
   const [selectedClub, setSelectedClub] = useState("All");
   const [selectedPosition, setSelectedPosition] = useState("All");
   const [sortBy, setSortBy] = useState<SortOption>("market-high");
@@ -22,6 +23,14 @@ export default function PlayersPage() {
   const clubs = useMemo(
     () => ["All", ...Array.from(new Set(players.map((player) => player.club))).sort()],
     []
+  );
+
+  const leagues = useMemo(
+    () => [
+      "All",
+      ...Array.from(new Set(players.map((player) => player.league))).sort(),
+    ],
+    [],
   );
 
   const positions = useMemo(
@@ -45,15 +54,32 @@ export default function PlayersPage() {
       const matchesClub =
         selectedClub === "All" || player.club === selectedClub;
 
+      const matchesLeague =
+        selectedLeague === "All" || player.league === selectedLeague;
+
       const matchesPosition =
         selectedPosition === "All" || player.position === selectedPosition;
 
       const matchesData =
         dataFilter === "all" ||
         (dataFilter === "connected" && Boolean(player.apiFootballId)) ||
-        (dataFilter === "demo" && !player.apiFootballId);
+        (dataFilter === "sourced" &&
+          !player.apiFootballId &&
+          (player.dataStatus?.club === "sourced" ||
+            player.dataStatus?.club === "verified" ||
+            player.dataStatus?.marketValue === "sourced")) ||
+        (dataFilter === "demo" &&
+          !player.apiFootballId &&
+          !player.dataStatus?.club &&
+          !player.dataStatus?.marketValue);
 
-      return matchesSearch && matchesClub && matchesPosition && matchesData;
+      return (
+        matchesSearch &&
+        matchesLeague &&
+        matchesClub &&
+        matchesPosition &&
+        matchesData
+      );
     });
 
     return [...result].sort((a, b) => {
@@ -71,10 +97,18 @@ export default function PlayersPage() {
 
       return a.name.localeCompare(b.name);
     });
-  }, [search, selectedClub, selectedPosition, sortBy, dataFilter]);
+  }, [
+    search,
+    selectedLeague,
+    selectedClub,
+    selectedPosition,
+    sortBy,
+    dataFilter,
+  ]);
 
   function clearFilters() {
     setSearch("");
+    setSelectedLeague("All");
     setSelectedClub("All");
     setSelectedPosition("All");
     setSortBy("market-high");
@@ -87,7 +121,7 @@ export default function PlayersPage() {
         <div className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
           <div>
             <p className="text-sm font-semibold uppercase tracking-wider text-green-500">
-              Premier League
+              Five-league intelligence
             </p>
 
             <h1 className="mt-2 text-4xl font-bold md:text-5xl">
@@ -109,25 +143,51 @@ export default function PlayersPage() {
         </div>
 
         <div className="mt-10 rounded-3xl border border-white/10 bg-white/5 p-5">
-          <div className="grid gap-4 lg:grid-cols-5">
+          <div className="grid gap-4 lg:grid-cols-3 xl:grid-cols-6">
             <input
               type="search"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
               placeholder="Search player, club or country..."
-              className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 text-white outline-none placeholder:text-gray-500 focus:border-green-500/50 lg:col-span-1"
+              className="rounded-2xl border border-white/10 bg-black/20 px-5 py-4 text-white outline-none placeholder:text-gray-500 focus:border-green-500/50"
             />
+
+            <select
+              value={selectedLeague}
+              onChange={(event) => {
+                setSelectedLeague(event.target.value);
+                setSelectedClub("All");
+              }}
+              className="rounded-2xl border border-white/10 bg-[#111c2d] px-5 py-4 text-white outline-none focus:border-green-500/50"
+            >
+              {leagues.map((league) => (
+                <option key={league} value={league}>
+                  {league === "All" ? "All leagues" : league}
+                </option>
+              ))}
+            </select>
 
             <select
               value={selectedClub}
               onChange={(event) => setSelectedClub(event.target.value)}
               className="rounded-2xl border border-white/10 bg-[#111c2d] px-5 py-4 text-white outline-none focus:border-green-500/50"
             >
-              {clubs.map((club) => (
+              {clubs
+                .filter(
+                  (club) =>
+                    club === "All" ||
+                    selectedLeague === "All" ||
+                    players.some(
+                      (player) =>
+                        player.club === club &&
+                        player.league === selectedLeague,
+                    ),
+                )
+                .map((club) => (
                 <option key={club} value={club}>
                   {club === "All" ? "All clubs" : club}
                 </option>
-              ))}
+                ))}
             </select>
 
             <select
@@ -164,7 +224,8 @@ export default function PlayersPage() {
             >
               <option value="all">All data sources</option>
               <option value="connected">API connected</option>
-              <option value="demo">Demo only</option>
+              <option value="sourced">Sourced snapshot</option>
+              <option value="demo">Prototype only</option>
             </select>
           </div>
 
@@ -188,10 +249,8 @@ export default function PlayersPage() {
                 className="group rounded-3xl border border-white/10 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-green-500/40 hover:bg-white/10"
               >
                 <div className="relative h-44 overflow-hidden rounded-2xl bg-black/20">
-                  <Image
-                    src={player.image}
-                    alt={player.name}
-                    fill
+                  <PlayerPortrait
+                    player={player}
                     sizes="(max-width: 640px) 100vw, 260px"
                     className="object-contain p-3 transition duration-300 group-hover:scale-105"
                   />
@@ -199,10 +258,16 @@ export default function PlayersPage() {
                     className={`absolute left-3 top-3 rounded-full border px-2.5 py-1 text-[11px] font-semibold backdrop-blur ${
                       player.apiFootballId
                         ? "border-sky-400/30 bg-sky-400/15 text-sky-200"
-                        : "border-amber-400/30 bg-amber-400/15 text-amber-200"
+                        : player.dataStatus?.marketValue === "sourced"
+                          ? "border-green-400/30 bg-green-400/15 text-green-200"
+                          : "border-amber-400/30 bg-amber-400/15 text-amber-200"
                     }`}
                   >
-                    {player.apiFootballId ? "API connected" : "Demo data"}
+                    {player.apiFootballId
+                      ? "API connected"
+                      : player.dataStatus?.marketValue === "sourced"
+                        ? "Sourced snapshot"
+                        : "Prototype data"}
                   </span>
                 </div>
 
