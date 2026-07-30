@@ -1,5 +1,4 @@
 import type { Metadata } from "next";
-import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import FavoriteButton from "@/components/FavoriteButton";
@@ -7,6 +6,7 @@ import MarketValueForecast from "@/components/MarketValueForecast";
 import ClubFitAnalysis from "@/components/ClubFitAnalysis";
 import DataStatusPanel from "@/components/DataStatusPanel";
 import ApiSeasonStats from "@/components/ApiSeasonStats";
+import PlayerPortrait from "@/components/PlayerPortrait";
 import { players } from "@/data/players";
 import {
   ApiFootballError,
@@ -43,7 +43,9 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       url: `/players/${player.id}`,
       title: `${player.name} on Tavalyze`,
       description,
-      images: [{ url: player.image, alt: player.name }],
+      ...(player.image
+        ? { images: [{ url: player.image, alt: player.name }] }
+        : {}),
     },
   };
 }
@@ -89,10 +91,8 @@ export default async function PlayerPage({ params }: Props) {
 
         <div className="grid gap-10 lg:grid-cols-[340px_1fr] lg:items-center">
           <div className="relative h-[360px] overflow-hidden rounded-3xl border border-white/10 bg-white/5">
-            <Image
-              src={player.image}
-              alt={player.name}
-              fill
+            <PlayerPortrait
+              player={player}
               sizes="340px"
               className="object-contain p-5"
               priority
@@ -227,10 +227,8 @@ export default async function PlayerPage({ params }: Props) {
                   className="group rounded-3xl border border-white/10 bg-white/5 p-5 transition hover:-translate-y-1 hover:border-green-500/40 hover:bg-white/10"
                 >
                   <div className="relative h-44 overflow-hidden rounded-2xl bg-black/20">
-                    <Image
-                      src={similarPlayer.image}
-                      alt={similarPlayer.name}
-                      fill
+                    <PlayerPortrait
+                      player={similarPlayer}
                       sizes="300px"
                       className="object-contain p-3"
                     />
