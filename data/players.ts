@@ -492,6 +492,7 @@ const playerData: Player[] = [
   {
     id: "estevao",
     name: "Estêvão",
+    image: "https://media.api-sports.io/football/players/425733.png",
     club: "Chelsea",
     league: "Premier League",
     nationality: "Brazil",
@@ -503,6 +504,7 @@ const playerData: Player[] = [
   {
     id: "joao-pedro",
     name: "João Pedro",
+    image: "https://media.api-sports.io/football/players/10329.png",
     club: "Chelsea",
     league: "Premier League",
     nationality: "Brazil",
@@ -514,6 +516,7 @@ const playerData: Player[] = [
   {
     id: "martin-zubimendi",
     name: "Martín Zubimendi",
+    image: "https://media.api-sports.io/football/players/47315.png",
     club: "Arsenal",
     league: "Premier League",
     nationality: "Spain",
@@ -536,6 +539,7 @@ const playerData: Player[] = [
   {
     id: "bryan-mbeumo",
     name: "Bryan Mbeumo",
+    image: "https://media.api-sports.io/football/players/20589.png",
     club: "Manchester United",
     league: "Premier League",
     nationality: "Cameroon",
@@ -547,6 +551,7 @@ const playerData: Player[] = [
   {
     id: "matheus-cunha",
     name: "Matheus Cunha",
+    image: "https://media.api-sports.io/football/players/1165.png",
     club: "Manchester United",
     league: "Premier League",
     nationality: "Brazil",
@@ -558,6 +563,7 @@ const playerData: Player[] = [
   {
     id: "benjamin-sesko",
     name: "Benjamin Šeško",
+    image: "https://media.api-sports.io/football/players/115589.png",
     club: "Manchester United",
     league: "Premier League",
     nationality: "Slovenia",
@@ -569,6 +575,7 @@ const playerData: Player[] = [
   {
     id: "jeremy-doku",
     name: "Jérémy Doku",
+    image: "https://media.api-sports.io/football/players/1422.png",
     club: "Manchester City",
     league: "Premier League",
     nationality: "Belgium",
@@ -580,6 +587,7 @@ const playerData: Player[] = [
   {
     id: "bruno-guimaraes",
     name: "Bruno Guimarães",
+    image: "https://media.api-sports.io/football/players/10135.png",
     club: "Newcastle United",
     league: "Premier League",
     nationality: "Brazil",
@@ -591,6 +599,7 @@ const playerData: Player[] = [
   {
     id: "gianluigi-donnarumma",
     name: "Gianluigi Donnarumma",
+    image: "https://media.api-sports.io/football/players/1622.png",
     club: "Manchester City",
     league: "Premier League",
     nationality: "Italy",
@@ -602,6 +611,7 @@ const playerData: Player[] = [
   {
     id: "eberechi-eze",
     name: "Eberechi Eze",
+    image: "https://media.api-sports.io/football/players/19586.png",
     club: "Arsenal",
     league: "Premier League",
     nationality: "England",
@@ -613,6 +623,7 @@ const playerData: Player[] = [
   {
     id: "pedro-neto",
     name: "Pedro Neto",
+    image: "https://media.api-sports.io/football/players/1864.png",
     club: "Chelsea",
     league: "Premier League",
     nationality: "Portugal",
@@ -624,6 +635,7 @@ const playerData: Player[] = [
   {
     id: "reece-james",
     name: "Reece James",
+    image: "https://media.api-sports.io/football/players/19545.png",
     club: "Chelsea",
     league: "Premier League",
     nationality: "England",
@@ -635,6 +647,7 @@ const playerData: Player[] = [
   {
     id: "morgan-gibbs-white",
     name: "Morgan Gibbs-White",
+    image: "https://media.api-sports.io/football/players/18746.png",
     club: "Nottingham Forest",
     league: "Premier League",
     nationality: "England",
@@ -646,6 +659,7 @@ const playerData: Player[] = [
   {
     id: "lamine-yamal",
     name: "Lamine Yamal",
+    image: "https://media.api-sports.io/football/players/386828.png",
     club: "Barcelona",
     league: "LaLiga",
     nationality: "Spain",
@@ -657,6 +671,7 @@ const playerData: Player[] = [
   {
     id: "kylian-mbappe",
     name: "Kylian Mbappé",
+    image: "https://media.api-sports.io/football/players/278.png",
     club: "Real Madrid",
     league: "LaLiga",
     nationality: "France",
@@ -668,6 +683,7 @@ const playerData: Player[] = [
   {
     id: "pedri",
     name: "Pedri",
+    image: "https://media.api-sports.io/football/players/133609.png",
     club: "Barcelona",
     league: "LaLiga",
     nationality: "Spain",
@@ -679,6 +695,7 @@ const playerData: Player[] = [
   {
     id: "vinicius-junior",
     name: "Vinicius Junior",
+    image: "https://media.api-sports.io/football/players/762.png",
     club: "Real Madrid",
     league: "LaLiga",
     nationality: "Brazil",
@@ -690,6 +707,7 @@ const playerData: Player[] = [
   {
     id: "jude-bellingham",
     name: "Jude Bellingham",
+    image: "https://media.api-sports.io/football/players/129718.png",
     club: "Real Madrid",
     league: "LaLiga",
     nationality: "England",
@@ -701,6 +719,7 @@ const playerData: Player[] = [
   {
     id: "julian-alvarez",
     name: "Julián Alvarez",
+    image: "https://media.api-sports.io/football/players/6009.png",
     club: "Atlético de Madrid",
     league: "LaLiga",
     nationality: "Argentina",
@@ -723,6 +742,7 @@ const playerData: Player[] = [
   {
     id: "federico-valverde",
     name: "Federico Valverde",
+    image: "https://media.api-sports.io/football/players/756.png",
     club: "Real Madrid",
     league: "LaLiga",
     nationality: "Uruguay",
@@ -734,6 +754,7 @@ const playerData: Player[] = [
   {
     id: "arda-guler",
     name: "Arda Güler",
+    image: "https://media.api-sports.io/football/players/291964.png",
     club: "Real Madrid",
     league: "LaLiga",
     nationality: "Türkiye",
@@ -756,6 +777,7 @@ const playerData: Player[] = [
   {
     id: "aurelien-tchouameni",
     name: "Aurélien Tchouaméni",
+    image: "https://media.api-sports.io/football/players/1271.png",
     club: "Real Madrid",
     league: "LaLiga",
     nationality: "France",
@@ -767,6 +789,7 @@ const playerData: Player[] = [
   {
     id: "raphinha",
     name: "Raphinha",
+    image: "https://media.api-sports.io/football/players/1496.png",
     club: "Barcelona",
     league: "LaLiga",
     nationality: "Brazil",
@@ -778,6 +801,7 @@ const playerData: Player[] = [
   {
     id: "trent-alexander-arnold",
     name: "Trent Alexander-Arnold",
+    image: "https://media.api-sports.io/football/players/283.png",
     club: "Real Madrid",
     league: "LaLiga",
     nationality: "England",
@@ -789,6 +813,7 @@ const playerData: Player[] = [
   {
     id: "dani-olmo",
     name: "Dani Olmo",
+    image: "https://media.api-sports.io/football/players/1323.png",
     club: "Barcelona",
     league: "LaLiga",
     nationality: "Spain",
@@ -800,6 +825,7 @@ const playerData: Player[] = [
   {
     id: "jules-kounde",
     name: "Jules Koundé",
+    image: "https://media.api-sports.io/football/players/1257.png",
     club: "Barcelona",
     league: "LaLiga",
     nationality: "France",
