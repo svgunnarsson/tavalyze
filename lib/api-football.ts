@@ -82,6 +82,34 @@ export type ApiFootballPlayerSeason = {
   }>;
 };
 
+export type ApiFootballTeam = {
+  team: {
+    id: number;
+    name: string;
+    code: string | null;
+    country: string;
+    founded: number | null;
+    national: boolean;
+    logo: string;
+  };
+};
+
+export type ApiFootballSquad = {
+  team: {
+    id: number;
+    name: string;
+    logo: string;
+  };
+  players: Array<{
+    id: number;
+    name: string;
+    age: number | null;
+    number: number | null;
+    position: string | null;
+    photo: string;
+  }>;
+};
+
 export class ApiFootballError extends Error {
   constructor(
     message: string,
@@ -165,6 +193,28 @@ export async function getApiFootballPlayerSeason(
   return apiFootballRequest<ApiFootballPlayerSeason[]>(
     "/players",
     { id: playerId, season },
+    86_400,
+  );
+}
+
+export async function searchApiFootballTeams(search: string) {
+  const cleanSearch = search.trim();
+
+  if (cleanSearch.length < 3 || cleanSearch.length > 50) {
+    throw new ApiFootballError("Team search must contain 3–50 characters.");
+  }
+
+  return apiFootballRequest<ApiFootballTeam[]>(
+    "/teams",
+    { search: cleanSearch },
+    86_400,
+  );
+}
+
+export async function getApiFootballSquad(teamId: number) {
+  return apiFootballRequest<ApiFootballSquad[]>(
+    "/players/squads",
+    { team: teamId },
     86_400,
   );
 }
