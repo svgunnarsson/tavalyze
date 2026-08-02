@@ -529,6 +529,9 @@ const playerData: Player[] = [
   {
     id: "elliot-anderson",
     name: "Elliot Anderson",
+    image: "https://media.api-sports.io/football/players/138908.png",
+    apiFootballId: 138908,
+    apiSeason: 2024,
     club: "Nottingham Forest",
     league: "Premier League",
     nationality: "England",
@@ -732,6 +735,9 @@ const playerData: Player[] = [
   {
     id: "fermin-lopez",
     name: "Fermín López",
+    image: "https://media.api-sports.io/football/players/340626.png",
+    apiFootballId: 340626,
+    apiSeason: 2024,
     club: "Barcelona",
     league: "LaLiga",
     nationality: "Spain",
@@ -875,6 +881,9 @@ const playerData: Player[] = [
   {
     id: "aleksandar-pavlovic",
     name: "Aleksandar Pavlović",
+    image: "https://media.api-sports.io/football/players/328033.png",
+    apiFootballId: 328033,
+    apiSeason: 2024,
     club: "Bayern Munich",
     league: "Bundesliga",
     nationality: "Germany",
@@ -898,6 +907,9 @@ const playerData: Player[] = [
   {
     id: "luis-diaz",
     name: "Luis Díaz",
+    image: "https://media.api-sports.io/football/players/2489.png",
+    apiFootballId: 2489,
+    apiSeason: 2024,
     club: "Bayern Munich",
     league: "Bundesliga",
     nationality: "Colombia",
@@ -921,6 +933,9 @@ const playerData: Player[] = [
   {
     id: "lennart-karl",
     name: "Lennart Karl",
+    image: "https://media.api-sports.io/football/players/494131.png",
+    apiFootballId: 494131,
+    apiSeason: 2024,
     club: "Bayern Munich",
     league: "Bundesliga",
     nationality: "Germany",
@@ -1148,6 +1163,9 @@ const playerData: Player[] = [
   {
     id: "pio-esposito",
     name: "Pio Esposito",
+    image: "https://media.api-sports.io/football/players/345808.png",
+    apiFootballId: 345808,
+    apiSeason: 2024,
     club: "Inter Milan",
     league: "Serie A",
     nationality: "Italy",
