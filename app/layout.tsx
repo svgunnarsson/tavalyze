@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Analytics } from "@vercel/analytics/next";
 import Navbar from "@/components/Navbar";
 import Footer from "@/components/Footer";
+import { AuthProvider } from "@/components/AuthProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -60,10 +61,12 @@ export default function RootLayout({
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[#07111f] text-white">
-        <Navbar />
-        {children}
-        <Footer />
-        <Analytics />
+        <AuthProvider>
+          <Navbar />
+          {children}
+          <Footer />
+          <Analytics />
+        </AuthProvider>
       </body>
     </html>
   );

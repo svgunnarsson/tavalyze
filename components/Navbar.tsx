@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import SearchBar from "@/components/SearchBar";
+import AccountButton from "@/components/AccountButton";
 
 export default function Navbar() {
   const pathname = usePathname();
@@ -45,7 +46,10 @@ export default function Navbar() {
             ))}
           </div>
 
-          <SearchBar compact className="hidden w-full max-w-60 xl:block" />
+          <div className="flex items-center gap-3">
+            <SearchBar compact className="hidden w-full max-w-52 xl:block" />
+            <AccountButton />
+          </div>
         </div>
 
         <div className="-mx-4 flex gap-5 overflow-x-auto border-t border-white/5 px-4 py-3 text-sm text-gray-300 md:hidden">

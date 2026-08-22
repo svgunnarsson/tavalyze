@@ -1,9 +1,6 @@
 "use client";
 
-import {
-  toggleFavoritePlayer,
-  useFavoritePlayerIds,
-} from "@/hooks/useFavorites";
+import { useFavorites } from "@/hooks/useFavorites";
 
 export default function FavoriteButton({
   playerId,
@@ -12,13 +9,14 @@ export default function FavoriteButton({
   playerId: string;
   playerName: string;
 }) {
-  const favoriteIds = useFavoritePlayerIds();
+  const { favoriteIds, syncing, toggleFavorite } = useFavorites();
   const isFavorite = favoriteIds.includes(playerId);
 
   return (
     <button
       type="button"
-      onClick={() => toggleFavoritePlayer(playerId)}
+      onClick={() => void toggleFavorite(playerId)}
+      disabled={syncing}
       aria-pressed={isFavorite}
       aria-label={
         isFavorite
@@ -34,7 +32,7 @@ export default function FavoriteButton({
       <span aria-hidden="true" className="text-xl">
         {isFavorite ? "♥" : "♡"}
       </span>
-      {isFavorite ? "Saved to favorites" : "Add to favorites"}
+      {syncing ? "Syncing…" : isFavorite ? "Saved to favorites" : "Add to favorites"}
     </button>
   );
 }
