@@ -9,6 +9,8 @@ import { createClient } from "@/lib/supabase/client";
 export default function LoginPage() {
   const router = useRouter();
   const { configured, user } = useAuth();
+  const googleAuthEnabled =
+    process.env.NEXT_PUBLIC_GOOGLE_AUTH_ENABLED === "true";
   const [email, setEmail] = useState("");
   const [message, setMessage] = useState("");
   const [busy, setBusy] = useState(false);
@@ -117,21 +119,25 @@ export default function LoginPage() {
             </div>
           ) : (
             <>
-              <button
-                type="button"
-                onClick={signInWithGoogle}
-                disabled={busy}
-                className="mt-8 flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white px-5 py-3.5 font-semibold text-gray-900 transition hover:bg-gray-100 disabled:opacity-60"
-              >
-                <span className="text-lg font-black text-blue-500">G</span>
-                Continue with Google
-              </button>
+              {googleAuthEnabled && (
+                <>
+                  <button
+                    type="button"
+                    onClick={signInWithGoogle}
+                    disabled={busy}
+                    className="mt-8 flex w-full items-center justify-center gap-3 rounded-xl border border-white/10 bg-white px-5 py-3.5 font-semibold text-gray-900 transition hover:bg-gray-100 disabled:opacity-60"
+                  >
+                    <span className="text-lg font-black text-blue-500">G</span>
+                    Continue with Google
+                  </button>
 
-              <div className="my-7 flex items-center gap-4 text-xs uppercase tracking-widest text-gray-600">
-                <span className="h-px flex-1 bg-white/10" /> or use email <span className="h-px flex-1 bg-white/10" />
-              </div>
+                  <div className="my-7 flex items-center gap-4 text-xs uppercase tracking-widest text-gray-600">
+                    <span className="h-px flex-1 bg-white/10" /> or use email <span className="h-px flex-1 bg-white/10" />
+                  </div>
+                </>
+              )}
 
-              <form onSubmit={sendMagicLink}>
+              <form onSubmit={sendMagicLink} className={googleAuthEnabled ? "" : "mt-8"}>
                 <label htmlFor="email" className="text-sm font-semibold text-gray-300">Email address</label>
                 <input
                   id="email"
