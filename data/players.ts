@@ -1,3 +1,5 @@
+import { premierLeagueExpansion } from "@/data/premier-league-expansion";
+
 export type Player = {
   id: string;
   name: string;
@@ -1376,4 +1378,4 @@ const playerData: Player[] = [
   },
 ];
 
-export const players: Player[] = playerData;
+export const players: Player[] = [...playerData, ...premierLeagueExpansion];
