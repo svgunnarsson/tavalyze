@@ -1,4 +1,5 @@
 import { premierLeagueExpansion } from "@/data/premier-league-expansion";
+import { premierLeagueSquadPlayers } from "@/data/premier-league-squads";
 
 export type Player = {
   id: string;
@@ -1378,4 +1379,8 @@ const playerData: Player[] = [
   },
 ];
 
-export const players: Player[] = [...playerData, ...premierLeagueExpansion];
+export const players: Player[] = [
+  ...playerData,
+  ...premierLeagueExpansion,
+  ...premierLeagueSquadPlayers,
+];
