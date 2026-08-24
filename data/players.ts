@@ -72,6 +72,25 @@ function sourcedSnapshot(league: SourcedLeague): Player["dataStatus"] {
   };
 }
 
+function verifiedClubMove(
+  league: SourcedLeague,
+  label: string,
+  url: string,
+): Player["dataStatus"] {
+  return {
+    club: "verified",
+    marketValue: "sourced",
+    lastChecked: "2026-08-24",
+    sources: [
+      { label, url },
+      {
+        label: `${league} market-value snapshot`,
+        url: SOURCE_URLS[league],
+      },
+    ],
+  };
+}
+
 const playerData: Player[] = [
   {
     id: "erling-haaland",
@@ -180,8 +199,8 @@ const playerData: Player[] = [
   {
     id: "rodri",
     name: "Rodri",
-    club: "Manchester City",
-    league: "Premier League",
+    club: "Barcelona",
+    league: "LaLiga",
     nationality: "Spain",
     position: "DM",
     age: 29,
@@ -189,6 +208,11 @@ const playerData: Player[] = [
     image: "/players/rodri.png",
     apiFootballId: 44,
     apiSeason: 2024,
+    dataStatus: verifiedClubMove(
+      "LaLiga",
+      "FC Barcelona transfer announcement",
+      "https://www.fcbarcelona.es/es/futbol/primer-equipo/noticias/4561501/el-fc-barcelona-ficha-a-rodrigo-hernndez",
+    ),
   },
   {
     id: "phil-foden",
@@ -482,13 +506,17 @@ const playerData: Player[] = [
     id: "sandro-tonali",
     name: "Sandro Tonali",
     image: "https://media.api-sports.io/football/players/31146.png",
-    club: "Newcastle United",
+    club: "Tottenham Hotspur",
     league: "Premier League",
     nationality: "Italy",
     position: "DM",
     age: 26,
     marketValue: 80,
-    dataStatus: sourcedSnapshot("Premier League"),
+    dataStatus: verifiedClubMove(
+      "Premier League",
+      "Tottenham Hotspur transfer announcement",
+      "https://www.tottenhamhotspur.com/news/1076467/welcome-sandro-tonali-makes-the-move-to-n17",
+    ),
   },
   {
     id: "estevao",
@@ -532,13 +560,17 @@ const playerData: Player[] = [
     image: "https://media.api-sports.io/football/players/138908.png",
     apiFootballId: 138908,
     apiSeason: 2024,
-    club: "Nottingham Forest",
+    club: "Manchester City",
     league: "Premier League",
     nationality: "England",
     position: "CM",
     age: 23,
     marketValue: 75,
-    dataStatus: sourcedSnapshot("Premier League"),
+    dataStatus: verifiedClubMove(
+      "Premier League",
+      "Manchester City transfer announcement",
+      "https://www.mancity.com/news/mens/elliot-anderson-signs-for-man-city-63920416",
+    ),
   },
   {
     id: "bryan-mbeumo",
@@ -592,13 +624,17 @@ const playerData: Player[] = [
     id: "bruno-guimaraes",
     name: "Bruno Guimarães",
     image: "https://media.api-sports.io/football/players/10135.png",
-    club: "Newcastle United",
+    club: "Arsenal",
     league: "Premier League",
     nationality: "Brazil",
     position: "CM",
     age: 28,
     marketValue: 75,
-    dataStatus: sourcedSnapshot("Premier League"),
+    dataStatus: verifiedClubMove(
+      "Premier League",
+      "Premier League transfer confirmation",
+      "https://www.premierleague.com/ar/news/4682480/five-reasons-why-arsenal-have-signed-bruno-guimaraes",
+    ),
   },
   {
     id: "gianluigi-donnarumma",
@@ -870,13 +906,17 @@ const playerData: Player[] = [
     id: "yan-diomande",
     name: "Yan Diomande",
     image: "https://media.api-sports.io/football/players/513776.png",
-    club: "RB Leipzig",
-    league: "Bundesliga",
+    club: "Real Madrid",
+    league: "LaLiga",
     nationality: "Côte d’Ivoire",
     position: "LW",
     age: 19,
     marketValue: 90,
-    dataStatus: sourcedSnapshot("Bundesliga"),
+    dataStatus: verifiedClubMove(
+      "LaLiga",
+      "Real Madrid transfer announcement",
+      "https://www.realmadrid.com/en-US/news/club/announcements/comunicado-oficial-diomande-06-08-2026",
+    ),
   },
   {
     id: "aleksandar-pavlovic",
@@ -972,13 +1012,17 @@ const playerData: Player[] = [
     id: "johan-manzambi",
     name: "Johan Manzambi",
     image: "https://media.api-sports.io/football/players/406244.png",
-    club: "SC Freiburg",
-    league: "Bundesliga",
+    club: "Aston Villa",
+    league: "Premier League",
     nationality: "Switzerland",
     position: "CM",
     age: 20,
     marketValue: 50,
-    dataStatus: sourcedSnapshot("Bundesliga"),
+    dataStatus: verifiedClubMove(
+      "Premier League",
+      "Premier League squad confirmation",
+      "https://www.premierleague.com/en/news/4679970/manzambi-squad-number-confirmed",
+    ),
   },
   {
     id: "felix-nmecha",

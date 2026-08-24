@@ -4,6 +4,54 @@ import { players } from "@/data/players";
 
 const transfers = [
   {
+    playerId: "rodri",
+    fromClub: "Manchester City",
+    toClub: "Barcelona",
+    fee: null,
+    date: "Summer 2026",
+    type: "Permanent",
+  },
+  {
+    playerId: "yan-diomande",
+    fromClub: "RB Leipzig",
+    toClub: "Real Madrid",
+    fee: null,
+    date: "Summer 2026",
+    type: "Permanent",
+  },
+  {
+    playerId: "bruno-guimaraes",
+    fromClub: "Newcastle United",
+    toClub: "Arsenal",
+    fee: null,
+    date: "Summer 2026",
+    type: "Permanent",
+  },
+  {
+    playerId: "elliot-anderson",
+    fromClub: "Nottingham Forest",
+    toClub: "Manchester City",
+    fee: null,
+    date: "Summer 2026",
+    type: "Permanent",
+  },
+  {
+    playerId: "sandro-tonali",
+    fromClub: "Newcastle United",
+    toClub: "Tottenham Hotspur",
+    fee: null,
+    date: "Summer 2026",
+    type: "Permanent",
+  },
+  {
+    playerId: "johan-manzambi",
+    fromClub: "SC Freiburg",
+    toClub: "Aston Villa",
+    fee: null,
+    date: "Summer 2026",
+    type: "Permanent",
+  },
+  {
     playerId: "morgan-rogers",
     fromClub: "Aston Villa",
     toClub: "Chelsea",
@@ -133,7 +181,7 @@ export default function TransfersPage() {
                 <p className="text-sm text-gray-500">Transfer Fee</p>
 
                 <p className="mt-2 text-3xl font-bold">
-                  €{transfer.fee}M
+                  {transfer.fee === null ? "Undisclosed" : `€${transfer.fee}M`}
                 </p>
               </div>
             </Link>
