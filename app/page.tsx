@@ -26,10 +26,10 @@ const features = [
   },
   {
     number: "03",
-    title: "Club intelligence",
+    title: "Prediction ledger",
     description:
-      "Explore squads, aggregate values and prototype club-fit analysis in one place.",
-    href: "/teams",
+      "See dated market calls, confidence levels and the review date before the result is known.",
+    href: "/predictions",
     accent: "from-purple-400/20 to-purple-400/0",
   },
 ];

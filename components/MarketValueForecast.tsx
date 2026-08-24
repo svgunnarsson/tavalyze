@@ -1,29 +1,11 @@
 "use client";
 
 import { useMemo, useState } from "react";
-
-type Scenario = "base" | "upside" | "downside";
-
-const scenarioDetails: Record<
-  Scenario,
-  { label: string; color: string; adjustment: number }
-> = {
-  base: { label: "Base case", color: "#22c55e", adjustment: 0 },
-  upside: { label: "Upside", color: "#38bdf8", adjustment: 0.15 },
-  downside: { label: "Downside", color: "#fb7185", adjustment: -0.18 },
-};
-
-function getBaseAnnualRate(age: number) {
-  if (age <= 21) return 0.15;
-  if (age <= 24) return 0.1;
-  if (age <= 27) return 0.05;
-  if (age <= 30) return 0;
-  return -0.08;
-}
-
-function projectValue(value: number, annualRate: number, months: number) {
-  return Math.max(1, Math.round(value * (1 + annualRate * (months / 12))));
-}
+import {
+  forecastScenarioDetails,
+  projectMarketValue,
+  type ForecastScenario,
+} from "@/lib/market-value-forecast";
 
 export default function MarketValueForecast({
   playerName,
@@ -34,16 +16,15 @@ export default function MarketValueForecast({
   currentValue: number;
   age: number;
 }) {
-  const [scenario, setScenario] = useState<Scenario>("base");
-  const detail = scenarioDetails[scenario];
+  const [scenario, setScenario] = useState<ForecastScenario>("base");
+  const detail = forecastScenarioDetails[scenario];
 
   const points = useMemo(() => {
-    const annualRate = getBaseAnnualRate(age) + detail.adjustment;
     return [0, 3, 6, 12].map((months) => ({
       months,
-      value: projectValue(currentValue, annualRate, months),
+      value: projectMarketValue(currentValue, age, months, scenario),
     }));
-  }, [age, currentValue, detail.adjustment]);
+  }, [age, currentValue, scenario]);
 
   const values = points.map((point) => point.value);
   const minimum = Math.max(0, Math.min(...values) * 0.85);
@@ -76,21 +57,23 @@ export default function MarketValueForecast({
         </div>
 
         <div className="flex flex-wrap gap-2" aria-label="Forecast scenario">
-          {(Object.keys(scenarioDetails) as Scenario[]).map((option) => (
-            <button
-              key={option}
-              type="button"
-              onClick={() => setScenario(option)}
-              aria-pressed={scenario === option}
-              className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
-                scenario === option
-                  ? "border-green-500/40 bg-green-500/15 text-white"
-                  : "border-white/10 bg-black/20 text-gray-400 hover:text-white"
-              }`}
-            >
-              {scenarioDetails[option].label}
-            </button>
-          ))}
+          {(Object.keys(forecastScenarioDetails) as ForecastScenario[]).map(
+            (option) => (
+              <button
+                key={option}
+                type="button"
+                onClick={() => setScenario(option)}
+                aria-pressed={scenario === option}
+                className={`rounded-xl border px-4 py-2 text-sm font-semibold transition ${
+                  scenario === option
+                    ? "border-green-500/40 bg-green-500/15 text-white"
+                    : "border-white/10 bg-black/20 text-gray-400 hover:text-white"
+                }`}
+              >
+                {forecastScenarioDetails[option].label}
+              </button>
+            ),
+          )}
         </div>
       </div>
 

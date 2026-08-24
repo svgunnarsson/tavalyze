@@ -7,7 +7,9 @@ import ClubFitAnalysis from "@/components/ClubFitAnalysis";
 import DataStatusPanel from "@/components/DataStatusPanel";
 import ApiSeasonStats from "@/components/ApiSeasonStats";
 import PlayerPortrait from "@/components/PlayerPortrait";
+import SharePredictionButton from "@/components/SharePredictionButton";
 import { players } from "@/data/players";
+import { predictions } from "@/data/predictions";
 import {
   ApiFootballError,
   getApiFootballPlayerSeason,
@@ -62,6 +64,9 @@ export default async function PlayerPage({ params }: Props) {
   const similarPlayers = (player.similarPlayerIds ?? [])
     .map((similarId) => players.find((item) => item.id === similarId))
     .filter((item) => item !== undefined);
+  const openPrediction = predictions.find(
+    (prediction) => prediction.playerId === player.id,
+  );
 
   let apiSeasonProfile: ApiFootballPlayerSeason | null = null;
 
@@ -194,6 +199,36 @@ export default async function PlayerPage({ params }: Props) {
           currentValue={player.marketValue}
           age={player.age}
         />
+
+        {openPrediction ? (
+          <section className="mt-6 flex flex-col gap-5 rounded-3xl border border-sky-400/20 bg-sky-400/[0.06] p-6 md:flex-row md:items-center md:justify-between md:p-8">
+            <div>
+              <p className="text-sm font-bold uppercase tracking-[0.2em] text-sky-300">
+                Public prediction receipt
+              </p>
+              <h2 className="mt-2 text-2xl font-black">
+                This forecast is now on the record.
+              </h2>
+              <p className="mt-2 max-w-2xl text-sm leading-6 text-slate-400">
+                Published at €{openPrediction.currentValue}M with a six-month
+                call of €{openPrediction.predictedValue}M and a scheduled review
+                date.
+              </p>
+            </div>
+            <div className="flex shrink-0 flex-wrap gap-2">
+              <Link
+                href={`/predictions/${openPrediction.id}`}
+                className="rounded-xl border border-white/10 bg-white/5 px-4 py-2.5 text-sm font-bold hover:bg-white/10"
+              >
+                View receipt
+              </Link>
+              <SharePredictionButton
+                predictionId={openPrediction.id}
+                playerName={player.name}
+              />
+            </div>
+          </section>
+        ) : null}
 
         <ClubFitAnalysis player={player} />
 

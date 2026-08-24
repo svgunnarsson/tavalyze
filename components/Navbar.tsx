@@ -13,6 +13,7 @@ export default function Navbar() {
     { href: "/market-values", label: "Market Values" },
     { href: "/transfers", label: "Transfers" },
     { href: "/compare", label: "Compare" },
+    { href: "/predictions", label: "Predictions" },
     { href: "/favorites", label: "Favorites" },
     { href: "/methodology", label: "Data" },
   ];

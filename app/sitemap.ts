@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { players } from "@/data/players";
+import { predictions } from "@/data/predictions";
 import { clubSlug } from "@/lib/player-slugs";
 
 const baseUrl = "https://www.tavalyze.com";
@@ -12,6 +13,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/market-values",
     "/transfers",
     "/compare",
+    "/predictions",
     "/favorites",
     "/methodology",
   ];
@@ -27,6 +29,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
       url: `${baseUrl}/players/${player.id}`,
       lastModified: new Date(),
       changeFrequency: "weekly" as const,
+      priority: 0.7,
+    })),
+    ...predictions.map((prediction) => ({
+      url: `${baseUrl}/predictions/${prediction.id}`,
+      lastModified: new Date(prediction.publishedAt),
+      changeFrequency: "monthly" as const,
       priority: 0.7,
     })),
     ...Array.from(new Set(players.map((player) => player.club))).map((club) => ({
